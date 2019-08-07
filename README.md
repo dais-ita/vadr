@@ -1,2 +1,2 @@
-# vadr-demo
+# VADR
 Visual / audible discriminative relevance demo code.
