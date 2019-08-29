@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebResourcesPaths">
+    <contentEntries>
+      <entry url="file://$PROJECT_DIR$/../../Datasets/Audio/Speech/speech_commands_v0.02">
+        <entryData>
+          <resourceRoots>
+            <path value="file://$PROJECT_DIR$/../../Datasets/Audio/Speech/speech_commands_v0.02" />
+          </resourceRoots>
+        </entryData>
+      </entry>
+    </contentEntries>
+  </component>
+</project>
