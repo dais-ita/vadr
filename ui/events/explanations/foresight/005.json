@@ -1,6 +1,0 @@
-{
-  "detection_id": "005",
-  "foresight": "Matched event detected\nRegular trigger word detected\n...\"up\" >= 3 times for \"Hooray!\"\n>> Infer triggered event",
-  "foresight_summary": "Up >>> Hooray!",
-  "foresight_detection": "005"
-}

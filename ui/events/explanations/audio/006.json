@@ -1,8 +1,0 @@
-{
-  "detection_id": "006",
-  "audio_image_url": "http://localhost:3000/images/soundwave_06.PNG",
-  "audio_sound_url": "http://localhost:3000/sounds/down-below.ogg",
-  "audio_matched_words": [
-    "down"
-  ]
-}
