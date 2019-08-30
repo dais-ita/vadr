@@ -15,11 +15,12 @@ const EXP_AUDIO = '#expAudio';
 const EXP_INF = '#expInferences';
 const EXP_WIDTH = '150px';
 const SERVER = 'http://localhost:3000';
-const URL_RESET = SERVER + '/reset?load_test_data=true';
+const URL_RESET = SERVER + '/reset';
 const URL_ACTIVITIES = SERVER + '/activities';
 const URL_EXPLANATIONS= SERVER + '/explanations';
-const URL_EXP= SERVER + '/explain?activity_id=';
+//const URL_EXP= SERVER + '/explain?activity_id=';
 const PARM_NORANDOM = '&no_random=true';
+const PARM_NODATA = '?load_test_data=';
 
 //$('#band_type_choices option[name="acoustic"]').text('Wedding Ceremony');
 
@@ -213,12 +214,20 @@ function showInferenceExplanation(exp) {
     }
 }
 
-function buttonReset(norandom) {
+function buttonReset(norandom, loaddata) {
     let resetUrl = URL_RESET;
+
+    if (loaddata) {
+        resetUrl += PARM_NODATA + 'true';
+    } else {
+        resetUrl += PARM_NODATA + 'false';
+    }
 
     if (norandom) {
         resetUrl += PARM_NORANDOM;
     }
+
+    console.log(resetUrl);
 
     hideExplanation();
 

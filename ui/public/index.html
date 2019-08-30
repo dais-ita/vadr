@@ -22,8 +22,9 @@
                     <i class="fas fa-bars"></i>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#" onclick="buttonReset(true)">Reset test data</a>
-                    <a class="dropdown-item" href="#" onclick="buttonReset()">Reset test data (random)</a>
+                    <a class="dropdown-item" href="#" onclick="buttonReset(true, true)">Reset test data</a>
+                    <a class="dropdown-item" href="#" onclick="buttonReset(false, true)">Reset test data (random)</a>
+                    <a class="dropdown-item" href="#" onclick="buttonReset(true, false)">Plain reset (no test data)</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" onclick="buttonActivities()">Show Activities</a>
                     <a class="dropdown-item" href="#" onclick="buttonExplanations()">Show Explanations</a>
