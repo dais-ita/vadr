@@ -8,9 +8,11 @@
 ## Speech Commands Model
 ...
 ## UI/API instructions
-cd ui/
-npm update
-npm start
+
+        cd ui/
+        npm update
+        npm start
+
 open browser (Chrome) on http://localhost:3000/
 Drop down the humburger icon and select 'Reset test data'
 insights should start to appear every few seconds and you can click around the user interface to explore the results
