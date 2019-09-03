@@ -1,0 +1,93 @@
+<html>
+<head>
+    <title>VADR</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/ae2360e811.js"></script>
+    <script src="./javascripts/vadr.js"></script>
+</head>
+<body onload="initialise()">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand">VADR (Visual Acoustic Discriminative Relevance) v1.0</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#" onclick="buttonReset(true, true)">Reset test data</a>
+                    <a class="dropdown-item" href="#" onclick="buttonReset(false, true)">Reset test data (random)</a>
+                    <a class="dropdown-item" href="#" onclick="buttonReset(true, false)">Plain reset (no test data)</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" onclick="buttonActivities()">Show Activities</a>
+                    <a class="dropdown-item" href="#" onclick="buttonExplanations()">Show Explanations</a>
+                    <a class="dropdown-item" href="#" onclick="buttonInsights()">Show Insights</a>
+                    <a class="dropdown-item" href="#" onclick="buttonForesights()">Show Foresights</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                Live feed:
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <h6>Webcam:</h6>
+                        <div class="embed-responsive embed-responsive-4by3">
+                            <iframe class="embed-responsive-item" src="//www.youtube.com/embed/FOajbVDTRlU?autoplay=1&showinfo=0&controls=0&loop=1&playlist=FOajbVDTRlU"></iframe>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="list-insights"><h6>Insights:</h6></label>
+                            <select class="form-control" id="list-insights" size="7" onclick="selectInsight()"></select>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="list-foresights"><h6>Foresights:</h6></label>
+                            <select class="form-control" id="list-foresights" size="7" onclick="selectForesight()"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    Explanations:
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div id="expSummary" class="col-12 d-none">
+                            <h5>&nbsp;&nbsp;&nbsp;&nbsp;Selected activity: <span id="expSummaryText">*Hooray! [10:42.06]</span></h5>
+                            <hr/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="expVideo" class="col-3 d-none">
+                            (video)
+                        </div>
+                        <div id="expAudio" class="col-3 d-none">
+                            (audio)
+                        </div>
+                        <div id="expInferences" class="col-6 d-none">
+                            (inferences)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

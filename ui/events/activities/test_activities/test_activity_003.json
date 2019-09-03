@@ -1,0 +1,11 @@
+{
+  "detection_id": "003",
+  "detection_timestamp": "{now}+8000",
+  "activity_id": "{rand:1-101}|83",
+  "video_url": "https://media.giphy.com/media/fqhDBPvNuHqubaqWxT/giphy.gif",
+  "audio_image_url": "http://localhost:3000/images/soundwave_03.PNG",
+  "audio_sound_url": "http://localhost:3000/sounds/up-above.ogg",
+  "audio_matched_words": [ "up" ],
+  "insight": "SkyDiving detected\nSkyDiving is mapped to Hooray!\n>> Infer \"Hooray!\" matched event",
+  "insight_summary": "*Hooray!"
+}

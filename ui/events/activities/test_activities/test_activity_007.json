@@ -1,0 +1,8 @@
+{
+  "detection_id": "007",
+  "detection_timestamp": "{now}+19000",
+  "activity_id": "{rand:1-101}|69",
+  "video_url": "https://media.giphy.com/media/WNhXBVUcqUoFexR2KQ/giphy.gif",
+  "audio_image_url": "http://localhost:3000/images/soundwave_07.PNG",
+  "audio_sound_url": "http://localhost:3000/sounds/leap.ogg"
+}

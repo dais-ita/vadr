@@ -1,0 +1,14 @@
+{
+  "detection_id": "005",
+  "detection_timestamp": "{now}+13000",
+  "activity_id": "{rand:1-101}|100",
+  "video_url": "https://media.giphy.com/media/YnSElOyzsqEe3cAUAf/giphy.gif",
+  "audio_image_url": "http://localhost:3000/images/soundwave_05.PNG",
+  "audio_sound_url": "http://localhost:3000/sounds/up-above.ogg",
+  "audio_matched_words": [ "up" ],
+  "insight": "WritingOnBoard detected\nWritingOnBoard is mapped to Hooray!\n>> Infer \"Hooray!\" matched event",
+  "insight_summary": "*Hooray!",
+  "foresight": "Matched event detected\nRegular trigger word detected\n...\"up\" >= 3 times for \"Hooray!\"\n>> Infer triggered event",
+  "foresight_summary": "Up >>> Hooray!",
+  "foresight_detection": "005"
+}

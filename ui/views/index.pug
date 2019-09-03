@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  ul
+    li Reset only
+    li Reset and load test data
+    li Reset and load test data (random classes)
+
+  <!--Navbar-->
+  nav(class="navbar navbar-light light-blue lighten-4")
+
+  <!-- Navbar brand -->
+  a(class="navbar-brand" href="#") Navbar
+
+  <!-- Collapse button -->
+  button(class="navbar-toggler toggler-example" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation")
+    span(class="dark-blue-text")
+      i(class="fas fa-bars fa-1x")
+
+  <!-- Collapsible content -->
+  div(class="collapse navbar-collapse" id="navbarSupportedContent1")
+
+  <!-- Links -->
+  ul(class="navbar-nav mr-auto")
+    li(class="nav-item active")
+      a(class="nav-link" href="#") Home
+        span(class="sr-only") (current)
+    li(class="nav-item")
+      a(class="nav-link" href="#") Features
+    li(class="nav-item")
+      a(class="nav-link" href="#") Pricing
+
+  <!-- Links -->
+
+  <!-- Collapsible content -->
