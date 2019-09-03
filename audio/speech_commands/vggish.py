@@ -12,6 +12,9 @@ from test_tube import HyperOptArgumentParser
 import audtorch.transforms as transforms
 from torch.utils.data.distributed import DistributedSampler
 
+import librosa
+import numpy as np
+
 
 import pytorch_lightning as pl
 
@@ -19,7 +22,7 @@ import pytorch_lightning as pl
 class VGGish(pl.LightningModule):
     """
     VGGish architecture for Speech Commands
-    Input:      224x96 amplitude log-spectrogram
+    Input:      64x96 Mel log spectrogram
     Output:     confidence for class in commands
     """
     def __init__(self, hparams):
@@ -160,18 +163,30 @@ class VGGish(pl.LightningModule):
 
     def __dataloader(self, train):
 
-        # init data generators
-        # audtorch doesn't include this yet
+        # --------------------------------------------------------
+        # Custom data transforms that audtorch doesn't include yet
+        # --------------------------------------------------------
         class ToTensor(object):
             def __call__(self, x):
                 return torch.tensor(x)
 
+        class Trim(object):
+            # trim off 7 cols to fit nicely into network shape (64,96)
+            def __call__(self,x):
+                return x[...,3:-4]
+
+        class Spectrogram(object):
+            # Return a log-scaled melspectrogram as per honk
+            def __call__(self, x):
+                return librosa.power_to_db(librosa.feature.melspectrogram(
+                    y=np.squeeze(x), sr=16000, n_mels=64, fmax=4000, fmin=20,
+                    n_fft=480, hop_length=16000 // 1000 * 10), ref=np.max)
+
         transform = transforms.Compose([
             transforms.RandomCrop(4096 * 4, method='replicate'),
             transforms.Normalize(),
-            # out size of [224, 96]. 447,172 if 4096*3. 447,130 if *4
-            transforms.Spectrogram(window_size=447, hop_size=130),
-            transforms.Log(),
+            Spectrogram(),
+            Trim(),
             ToTensor()])
 
         dataset = SpeechCommands(root=self.hparams.data_root, train=train,
