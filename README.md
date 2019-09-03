@@ -23,7 +23,7 @@ There is also docs (a video) in the docs/ and docs/video/ folder that shows a qu
 ## Flask services
 cd flask/video/webcam
 python main.py
-This will start a stream of your webcam on localhost:5001
+This will start a stream of your webcam on localhost:5001 and the live feed itself is on localhost:5001/video_feed (which is used by the UI as the stream source)
 
 ### Installation instructions
 1. Get the modified `audtorch` library and install it in develop mode 
