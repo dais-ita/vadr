@@ -103,8 +103,14 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+#pycharm project settings
+.idea/
 # nodejs
 node_modules
 
 # MacOS
 .DS_Store
+
+#torch models
+*.pth
+*.pt
