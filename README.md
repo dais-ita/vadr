@@ -16,7 +16,12 @@ Drop down the humburger icon and select 'Reset test data'
 insights should start to appear every few seconds and you can click around the user interface to explore the results
 To reset the environment simply choose 'Reset test data' from the hamburger menu at any time.
 
-There is also a video in the video/ folder that shows a quick demo
+There is also docs (a video) in the docs/ and docs/video/ folder that shows a quick demo
+
+## Flask services
+cd flask/video/webcam
+python main.py
+This will start a stream of your webcam on localhost:5001
 
 ### Installation instructions
 1. Get the modified `audtorch` library and install it in develop mode 
