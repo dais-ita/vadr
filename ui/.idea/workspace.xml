@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ccb0c005-db88-4e00-8f4d-40383a8fed77" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../videos/VADR_video.mov" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../video/flask/webcam/camera.py" beforeDir="false" afterPath="$PROJECT_DIR$/../video/flask/webcam/camera.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -300,12 +298,12 @@
       <workItem from="1566628090127" duration="10054000" />
       <workItem from="1566983191283" duration="42779000" />
       <workItem from="1567184968888" duration="1248000" />
-      <workItem from="1567512600191" duration="764000" />
+      <workItem from="1567512600191" duration="1048000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55002000" />
+    <option name="totallyTimeSpent" value="55286000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
