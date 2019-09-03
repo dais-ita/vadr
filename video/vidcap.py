@@ -10,7 +10,7 @@ cudnn.enabled = True
 cudnn.benchmark = True
 import torchvision as tv
 import matplotlib.pyplot as plt
-# from models import resnet, layers
+# from audio import resnet, layers
 sys.path.append('/home/c1435690/Projects/DAIS-ITA/torchexplain')
 import lrp
 import torch.nn.functional as F
@@ -18,7 +18,7 @@ import torch.nn.functional as F
 norm_value = 1
 # ds_mean = [114.7748 / norm_value, 107.7354 / norm_value, 99.4750 / norm_value]
 ds_mean = [90.0, 98.0, 102.0]
-from models import c3d
+from audio import c3d
 import collections
 import time
 import explain
