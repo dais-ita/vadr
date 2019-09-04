@@ -6,6 +6,6 @@
   "audio_image_url": "http://localhost:3000/images/soundwave_02.PNG",
   "audio_sound_url": "http://localhost:3000/sounds/up-above.ogg",
   "audio_matched_words": [ "up" ],
-  "insight": "TaiChi detected\nTaiChi is mapped to Hooray!\n>> Infer \"Hooray!\" matched event",
-  "insight_summary": "*Hooray!"
+  "insight": "Activity <b>UCF101 class 91 (TaiChi)</b> detected\nTaiChi indicates action <b>Surrender</b>",
+  "insight_summary": "Surrender"
 }

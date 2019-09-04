@@ -6,9 +6,9 @@
   "audio_image_url": "http://localhost:3000/images/soundwave_05.PNG",
   "audio_sound_url": "http://localhost:3000/sounds/up-above.ogg",
   "audio_matched_words": [ "up" ],
-  "insight": "WritingOnBoard detected\nWritingOnBoard is mapped to Hooray!\n>> Infer \"Hooray!\" matched event",
-  "insight_summary": "*Hooray!",
-  "foresight": "Matched event detected\nRegular trigger word detected\n...\"up\" >= 3 times for \"Hooray!\"\n>> Infer triggered event",
-  "foresight_summary": "Up >>> Hooray!",
+  "insight": "Activity <b>UCF101 class 100 (WritingOnBoard)</b> detected\nWritingOnBoard indicates action <b>Surrender</b>",
+  "insight_summary": "Surrender",
+  "foresight": "Action identified AND regular trigger word detected\n...<b>up</b> >= 3 times for identified action <b>Surrender</b>>>> Infer predicted action",
+  "foresight_summary": "Up >>> Surrender",
   "foresight_detection": "005"
 }

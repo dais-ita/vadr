@@ -6,6 +6,6 @@
   "audio_image_url": "http://localhost:3000/images/soundwave_06.PNG",
   "audio_sound_url": "http://localhost:3000/sounds/down-below.ogg",
   "audio_matched_words": [ "down" ],
-  "insight": "TennisSwing detected\nTennisSwing is mapped to Calm Down!\n>> Infer \"Calm down!\" matched event",
-  "insight_summary": "*Calm Down!"
+  "insight": "Activity <b>UCF101 class 92 (TennisSwing)</b> detected\nTennisSwing indicates action <b>At Ease</b>",
+  "insight_summary": "At Ease"
 }

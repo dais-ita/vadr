@@ -28,66 +28,68 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" onclick="buttonActivities()">Show Activities</a>
                     <a class="dropdown-item" href="#" onclick="buttonExplanations()">Show Explanations</a>
-                    <a class="dropdown-item" href="#" onclick="buttonInsights()">Show Insights</a>
-                    <a class="dropdown-item" href="#" onclick="buttonForesights()">Show Foresights</a>
+                    <a class="dropdown-item" href="#" onclick="buttonIdentified()">Show Identified</a>
+                    <a class="dropdown-item" href="#" onclick="buttonPredicted()">Show Predicted</a>
                 </div>
             </li>
         </ul>
     </div>
 </nav>
 
-    <div class="container-fluid">
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            Live feed:
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-3">
+                    <h6>Webcam:</h6>
+                    <div class="embed-responsive embed-responsive-4by3">
+                        <iframe class="embed-responsive-item" src="//www.youtube.com/embed/FOajbVDTRlU?autoplay=1&showinfo=0&controls=0&loop=1&playlist=FOajbVDTRlU"></iframe>
+<!--                        <iframe class="embed-responsive-item" src="http://localhost:5001/video_feed"></iframe> -->
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="list-detected"><h6>Detected activity:</h6></label>
+                        <select class="form-control" id="list-detected" size="7" onchange="selectDetected()"></select>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="list-identified"><h6>Identified action:</h6></label>
+                        <select class="form-control" id="list-identified" size="7" onchange="selectIdentified()"></select>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="list-predicted"><h6>Predicted action:</h6></label>
+                        <select class="form-control" id="list-predicted" size="3" onchange="selectPredicted()"></select>
+                    </div>
+                    <img src="./images/activity_key.png" width = "100%"/>
+                </div>
+            </div>
+        </div>
         <div class="card">
             <div class="card-header">
-                Live feed:
+                Explanations:
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-3">
-                        <h6>Webcam:</h6>
-                        <div class="embed-responsive embed-responsive-4by3">
-                            <iframe class="embed-responsive-item" src="http://localhost:5001/video_feed"></iframe>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="form-group">
-                            <label for="list-insights"><h6>Insights:</h6></label>
-                            <select class="form-control" id="list-insights" size="7" onclick="selectInsight()"></select>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="form-group">
-                            <label for="list-foresights"><h6>Foresights:</h6></label>
-                            <select class="form-control" id="list-foresights" size="7" onclick="selectForesight()"></select>
-                        </div>
+                    <div id="expSummary" class="col-12 d-none">
+                        <h5>&nbsp;<span id="expSummaryText"></span></h5>
+                        <hr/>
                     </div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    Explanations:
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div id="expSummary" class="col-12 d-none">
-                            <h5>&nbsp;&nbsp;&nbsp;&nbsp;Selected activity: <span id="expSummaryText">*Hooray! [10:42.06]</span></h5>
-                            <hr/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div id="expVideo" class="col-3 d-none">
-                            (video)
-                        </div>
-                        <div id="expAudio" class="col-3 d-none">
-                            (audio)
-                        </div>
-                        <div id="expInferences" class="col-6 d-none">
-                            (inferences)
-                        </div>
-                    </div>
+                <div class="row">
+                    <div id="expVideo" class="col-3 d-none"></div>
+                    <div id="expAudio" class="col-3 d-none"></div>
+                    <div id="expInferences" class="col-6 d-none"></div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>

@@ -1,13 +1,14 @@
 let lastTs = null;
 let activities = {};
 let explanations = {};
-let insights = {};
-let foresights = {};
+let identified = {};
+let predicted = {};
 
 const DEBUG = false;
 const POLL_DELAY = 500;
-const LIST_INSIGHTS = '#list-insights';
-const LIST_FORESIGHTS = '#list-foresights';
+const LIST_DETECTED = '#list-detected';
+const LIST_IDENTIFIED = '#list-identified';
+const LIST_PREDICTED = '#list-predicted';
 const EXP_SUMM = '#expSummary';
 const EXP_SUMMTEXT = '#expSummaryText';
 const EXP_VIDEO = '#expVideo';
@@ -21,6 +22,10 @@ const URL_EXPLANATIONS= SERVER + '/explanations';
 //const URL_EXP= SERVER + '/explain?activity_id=';
 const PARM_NORANDOM = '&no_random=true';
 const PARM_NODATA = '?load_test_data=';
+
+const MODE_DET = 0;
+const MODE_IDENT = 1;
+const MODE_PRED = 2;
 
 //$('#band_type_choices option[name="acoustic"]').text('Wedding Ceremony');
 
@@ -64,15 +69,15 @@ function populateExplanations(expList) {
             explanations[exp.activity.detection_id] = exp;
 
             if (exp.insight) {
-                if (!insights[exp.activity.detection_id]) {
-                    insights[exp.activity.detection_id] = exp;
+                if (!identified[exp.activity.detection_id]) {
+                    identified[exp.activity.detection_id] = exp;
                     updateInsightsList(exp);
                 }
             }
 
             if (exp.foresight) {
-                if (!foresights[exp.activity.detection_id]) {
-                    foresights[exp.activity.detection_id] = exp;
+                if (!predicted[exp.activity.detection_id]) {
+                    predicted[exp.activity.detection_id] = exp;
                     updateForesightsList(exp);
                 }
             }
@@ -81,7 +86,7 @@ function populateExplanations(expList) {
 }
 
 function populateInsightsList(data) {
-    let list = $(LIST_INSIGHTS);
+    let list = $(LIST_DETECTED);
 
     $.each(data.result.activities, function() {
         list.append($('<option />').val(this.detection_id).text(descriptionForInsight(this)));
@@ -89,41 +94,70 @@ function populateInsightsList(data) {
 }
 
 function updateInsightsList(exp) {
-    $(LIST_INSIGHTS + ' option').each(function() {
-        if (this.value == exp.activity.detection_id) {
-            this.text = exp.insight.insight_summary + ' ' + timestampTextFor(exp.activity.detection_timestamp);
-        }
-    });
+    let list = $(LIST_IDENTIFIED);
+
+    list.append($('<option />').val(exp.insight.detection_id).text(exp.insight.insight_summary + ' ' + timestampTextFor(exp.activity.detection_timestamp)));
 }
 
 function updateForesightsList(exp) {
-    let list = $(LIST_FORESIGHTS);
+    let list = $(LIST_PREDICTED);
 
-    list.append($('<option />').val(exp.foresight.foresight_detection).text(exp.foresight.foresight_summary));
+    list.append($('<option />').val(exp.foresight.foresight_detection).text(exp.foresight.foresight_summary + ' ' + timestampTextFor(exp.activity.detection_timestamp)));
 }
 
-function selectInsight() {
-    let activityId = $(LIST_INSIGHTS).val();
+function selectDetected() {
+    let activityId = $(LIST_DETECTED).val();
 
     if (activityId) {
-        showExplanation(explanations[activityId]);
+        showExplanation(explanations[activityId], MODE_DET);
     } else {
         hideExplanation();
     }
+
+    deselectIdentified();
+    deselectPredicted();
 }
 
-function selectForesight() {
-    let activityId = $(LIST_FORESIGHTS).val();
+function selectIdentified() {
+    let activityId = $(LIST_IDENTIFIED).val();
 
     if (activityId) {
-        showExplanation(explanations[activityId]);
+        showExplanation(explanations[activityId], MODE_IDENT);
     } else {
         hideExplanation();
     }
+
+    deselectDetected();
+    deselectPredicted();
 }
 
-function showExplanation(exp) {
-    showSummaryExplanation(exp);
+function selectPredicted() {
+    let activityId = $(LIST_PREDICTED).val();
+
+    if (activityId) {
+        showExplanation(explanations[activityId], MODE_PRED);
+    } else {
+        hideExplanation();
+    }
+
+    deselectDetected();
+    deselectIdentified();
+}
+
+function deselectDetected() {
+    $(LIST_DETECTED).find('option').prop('selected', false);
+}
+
+function deselectIdentified() {
+    $(LIST_IDENTIFIED).find('option').prop('selected', false);
+}
+
+function deselectPredicted() {
+    $(LIST_PREDICTED).find('option').prop('selected', false);
+}
+
+function showExplanation(exp, mode) {
+    showSummaryExplanation(exp, mode);
     showVideoExplanation(exp);
     showAudioExplanation(exp);
     showInferenceExplanation(exp);
@@ -136,10 +170,10 @@ function hideExplanation() {
     $(EXP_INF).addClass('d-none');
 }
 
-function showSummaryExplanation(exp) {
+function showSummaryExplanation(exp, mode) {
     $(EXP_SUMM).removeClass('d-none');
 
-    $(EXP_SUMMTEXT).html(descriptionForExplanation(exp));
+    $(EXP_SUMMTEXT).html(descriptionForExplanation(exp, mode));
 }
 
 function showVideoExplanation(exp) {
@@ -196,12 +230,12 @@ function showInferenceExplanation(exp) {
         html += '<ol>';
 
         if (exp.insight) {
-            let fText = exp.insight.insight.replace(new RegExp('\n', 'g'), '<BR/>')
+            let fText = exp.insight.insight.replace(new RegExp('\n', 'g'), '<BR/>');
             html += '<li>' + fText + '</li>';
         }
 
         if (exp.foresight) {
-            let fText = exp.foresight.foresight.replace(new RegExp('\n', 'g'), '<BR/>')
+            let fText = exp.foresight.foresight.replace(new RegExp('\n', 'g'), '<BR/>');
             html += '<li>' + fText + '</li>';
         }
 
@@ -233,10 +267,11 @@ function buttonReset(norandom, loaddata) {
 
     activities = {};
     explanations = {};
-    insights = {};
-    foresights = {};
-    $(LIST_INSIGHTS).empty();
-    $(LIST_FORESIGHTS).empty();
+    identified = {};
+    predicted = {};
+    $(LIST_DETECTED).empty();
+    $(LIST_IDENTIFIED).empty();
+    $(LIST_PREDICTED).empty();
 
     $.get(resetUrl, function(data) {
         debug(data);
@@ -251,28 +286,34 @@ function buttonExplanations() {
     console.log(explanations);
 }
 
-function buttonInsights() {
-    console.log(insights);
+function buttonIdentified() {
+    console.log(identified);
 }
 
-function buttonForesights() {
-    console.log(foresights);
+function buttonPredicted() {
+    console.log(predicted);
 }
 
 function descriptionForInsight(activity) {
-    return 'activity detected (' + activity.activity_id + ') ' + timestampTextFor(activity.detection_timestamp);
+    return 'UCF101 class ' + activity.activity_id + ' ' + timestampTextFor(activity.detection_timestamp);
 }
 
-function descriptionForExplanation(exp) {
-    let label = null;
-    let insight = insights[exp.activity.detection_id];
+function descriptionForExplanation(exp, mode) {
+    let label = 'Detected activity: ' + descriptionForDetected(exp);
 
-    if (insight) {
-        label = insight.insight.insight_summary;
-    } else {
-        label = exp.detected.name;
+    if (mode == MODE_IDENT) {
+        let insight = identified[exp.activity.detection_id];
+
+        if (insight) {
+            label = 'Identified activity: ' + '<b>' + insight.insight.insight_summary + '</b> from detected activity ' + descriptionForDetected(exp);
+        }
     }
+
     return label + ' ' + timestampTextFor(exp.activity.detection_timestamp);
+}
+
+function descriptionForDetected(exp) {
+    return '<b>UCF101 class ' + exp.activity.activity_id + '</b>' + '<b> (' + exp.detected.name + ')</b>'
 }
 
 function timestampTextFor(ts) {

@@ -6,6 +6,6 @@
   "audio_image_url": "http://localhost:3000/images/soundwave_03.PNG",
   "audio_sound_url": "http://localhost:3000/sounds/up-above.ogg",
   "audio_matched_words": [ "up" ],
-  "insight": "SkyDiving detected\nSkyDiving is mapped to Hooray!\n>> Infer \"Hooray!\" matched event",
-  "insight_summary": "*Hooray!"
+  "insight": "Activity <b>UCF101 class 83 (SkyDiving)</b> detected\nSkyDiving indicates action <b>Surrender</b>",
+  "insight_summary": "Surrender"
 }
