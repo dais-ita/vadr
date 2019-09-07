@@ -15,7 +15,6 @@ from torch.utils.data.distributed import DistributedSampler
 import librosa
 import numpy as np
 
-
 import pytorch_lightning as pl
 
 
@@ -25,11 +24,16 @@ class VGGish(pl.LightningModule):
     Input:      64x96 Mel log spectrogram
     Output:     confidence for class in commands
     """
+
     def __init__(self, hparams):
         super(VGGish, self).__init__()
         self.hparams = hparams
 
         self.batch_size = hparams.batch_size
+
+        # hack to set n_logits before building the model
+        self.n_logits = len(set(SpeechCommands(root=self.hparams.data_root, include=self.hparams.data_partition,
+                                               download=True).add_silence().targets))
 
         self.__build_model()
 
@@ -57,16 +61,14 @@ class VGGish(pl.LightningModule):
             nn.MaxPool2d(kernel_size=2, stride=2))
 
         self.classifier = nn.Sequential(
-            nn.Linear(512 * 14 * 7, 4096),
+            nn.Linear(512 * 4 * 6, 4096),
             nn.ReLU(inplace=True),
             nn.Dropout(self.hparams.drop_prob),
             nn.Linear(4096, 4096),
             nn.ReLU(inplace=True),
             nn.Dropout(self.hparams.drop_prob),
-            nn.Linear(4096, len(self.hparams.command_list)))
+            nn.Linear(4096, self.n_logits))
 
-    def __build_dataset(self):
-        return
 
     def forward(self, x):
         x = self.features(x)
@@ -168,12 +170,12 @@ class VGGish(pl.LightningModule):
         # --------------------------------------------------------
         class ToTensor(object):
             def __call__(self, x):
-                return torch.tensor(x)
+                return torch.tensor(x, dtype=torch.float)
 
         class Trim(object):
             # trim off 7 cols to fit nicely into network shape (64,96)
-            def __call__(self,x):
-                return x[...,3:-4]
+            def __call__(self, x):
+                return x[..., 3:-4]
 
         class Spectrogram(object):
             # Return a log-scaled melspectrogram as per honk
@@ -182,15 +184,20 @@ class VGGish(pl.LightningModule):
                     y=np.squeeze(x), sr=16000, n_mels=64, fmax=4000, fmin=20,
                     n_fft=480, hop_length=16000 // 1000 * 10), ref=np.max)
 
+        class Unsqueeze(object):
+            def __call__(self, x):
+                return x.unsqueeze(0)
+
         transform = transforms.Compose([
             transforms.RandomCrop(4096 * 4, method='replicate'),
             transforms.Normalize(),
             Spectrogram(),
             Trim(),
-            ToTensor()])
+            ToTensor(),
+            Unsqueeze()])
 
-        dataset = SpeechCommands(root=self.hparams.data_root, train=train,
-                                 transform=transform, download=True)
+        dataset = SpeechCommands(root=self.hparams.data_root, train=train, include=self.hparams.data_partition,
+                                 transform=transform, download=True, silence=False)
 
         # when using multi-node (ddp) we need to add the datasampler
         train_sampler = None
@@ -209,7 +216,6 @@ class VGGish(pl.LightningModule):
         )
 
         return loader
-
 
     @pl.data_loader
     def tng_dataloader(self):
@@ -239,15 +245,13 @@ class VGGish(pl.LightningModule):
         # param overwrites
         # parser.set_defaults(gradient_clip=5.0)
 
-        parser.add_argument('--command_list', default=["yes", "no", "up", "down", "left", "right", "stop", "go"],
-                            type=str)
+        parser.add_argument('--data_partition', default="10cmd", type=str)
 
         # network params
-        # use 500 for CPU, 50000 for GPU to see speed difference
         parser.opt_list('--drop_prob', default=0.2, options=[0.2, 0.5], type=float, tunable=False)
 
         # data
-        parser.add_argument('--data_root', default=os.path.join(root_dir, 'speech_commands_v0.02'), type=str)
+        parser.add_argument('--data_root', default=os.path.join('~/Datasets/Audio', 'speech_commands_v0.02'), type=str)
 
         # training params (opt)
         parser.opt_list('--learning_rate', default=0.001 * 8, type=float,
@@ -262,4 +266,3 @@ class VGGish(pl.LightningModule):
                         options=[32, 64, 128, 256], tunable=False,
                         help='batch size will be divided over all gpus being used across all nodes')
         return parser
-

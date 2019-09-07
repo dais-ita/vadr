@@ -38,7 +38,6 @@ def main(hparams):
         verbose=True,
         mode='max'
     )
-
     checkpoint = ModelCheckpoint(
         filepath=model_save_path,
         save_best_only=True,
@@ -50,7 +49,8 @@ def main(hparams):
     trainer = Trainer(
         experiment=exp,
         checkpoint_callback=checkpoint,
-        early_stop_callback=early_stop
+        early_stop_callback=early_stop,
+        gpus=[0],
     )
 
     # start training
@@ -84,5 +84,4 @@ if __name__ == '__main__':
     # RUN TRAINING
     # ---------------------
     # run on HPC cluster
-    print('RUNNING ON CPU')
     main(hyperparams)
