@@ -46,28 +46,32 @@
                 <div class="col-3">
                     <h6>Webcam:</h6>
                     <div class="embed-responsive embed-responsive-4by3">
-                        <iframe class="embed-responsive-item" src="//www.youtube.com/embed/FOajbVDTRlU?autoplay=1&showinfo=0&controls=0&loop=1&playlist=FOajbVDTRlU"></iframe>
+                        <video class="embed-responsive-item" controls autoplay loop>
+                            <source src="/videos/liam_demo.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+<!--                        <iframe class="embed-responsive-item" src="//www.youtube.com/embed/FOajbVDTRlU?autoplay=1&showinfo=0&controls=0&loop=1&playlist=FOajbVDTRlU"></iframe> -->
 <!--                        <iframe class="embed-responsive-item" src="http://localhost:5001/video_feed"></iframe> -->
                     </div>
                 </div>
                 <div class="col-3">
                     <div class="form-group">
                         <label for="list-detected"><h6>Detected activity:</h6></label>
-                        <select class="form-control" id="list-detected" size="7" onchange="selectDetected()"></select>
+                        <select class="form-control" id="list-detected" size="14" onchange="selectDetected()"></select>
                     </div>
                 </div>
                 <div class="col-3">
                     <div class="form-group">
                         <label for="list-identified"><h6>Identified action:</h6></label>
-                        <select class="form-control" id="list-identified" size="7" onchange="selectIdentified()"></select>
+                        <select class="form-control" id="list-identified" size="8" onchange="selectIdentified()"></select>
                     </div>
-                </div>
-                <div class="col-3">
                     <div class="form-group">
                         <label for="list-predicted"><h6>Predicted action:</h6></label>
                         <select class="form-control" id="list-predicted" size="3" onchange="selectPredicted()"></select>
                     </div>
-                    <img src="./images/activity_key.png" width = "100%"/>
+                </div>
+                <div class="col-3">
+                    <img src="./images/activity_key_simple.png" width = "100%"/>
                 </div>
             </div>
         </div>
@@ -83,7 +87,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="expVideo" class="col-3 d-none"></div>
+                    <div id="expVidContainer" class="col-3">
+                        <div class="embed-responsive embed-responsive-4by3">
+                            <div id="expVideo" class="d-none"></div>
+                        </div>
+                    </div>
                     <div id="expAudio" class="col-3 d-none"></div>
                     <div id="expInferences" class="col-6 d-none"></div>
                 </div>

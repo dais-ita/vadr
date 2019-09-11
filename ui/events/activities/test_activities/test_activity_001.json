@@ -1,8 +1,11 @@
 {
   "detection_id": "001",
-  "detection_timestamp": "{now}",
-  "activity_id": "{rand:1-101}|98",
-  "video_url": "https://media.giphy.com/media/kDOJz0TuIPaH2zklnE/giphy.gif",
-  "audio_image_url": "http://localhost:3000/images/soundwave_01.PNG",
-  "audio_sound_url": "http://localhost:3000/sounds/cat.ogg"
+  "detection_timestamp": "{now}+4000",
+  "activity_id": "{rand:1-101}|12",
+  "video_url": "http://localhost:3000/videos/newclip_003.mp4",
+  "audio_image_url": "http://localhost:3000/images/audio/yes.png",
+  "audio_sound_url": "http://localhost:3000/sounds/yes.wav",
+  "audio_matched_words": [ "yes" ],
+  "insight": "Activity <b>UCF101 class 12 (BlowDryHair)</b> detected\nBlowDryHair indicates action <b>Salute</b>",
+  "insight_summary": "Salute"
 }

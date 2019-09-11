@@ -183,8 +183,12 @@ function showVideoExplanation(exp) {
         if (exp.video.video_url) {
             let html = '';
 
-            html += '<h6>Video:</h6>';
-            html += '<img src="' + exp.video.video_url + '" width="' + EXP_WIDTH+ '"></img>';
+//            html += '<img src="' + exp.video.video_url + '" width="' + EXP_WIDTH+ '"></img>';
+//            html += '<iframe class="embed-responsive-item" src="' + exp.video.video_url + '"></iframe>';
+            html += '<video class="embed-responsive-item" controls autoplay loop>';
+            html += '  <source src="' + exp.video.video_url + '" type="video/mp4">';
+            html += '   Your browser does not support the video tag.';
+            html += '</video>';
 
             expVideo.html(html);
             expVideo.removeClass('d-none');
@@ -201,16 +205,9 @@ function showAudioExplanation(exp) {
         let html = '';
 
         if (exp.audio.audio_image_url) {
-            html += '<h6>Audio:</h6>';
-            html += '<img src="' + exp.audio.audio_image_url + '" width="' + EXP_WIDTH + '"></img>';
-        }
-
-        if (exp.audio.audio_sound_url) {
-            html += '<audio controls="controls" style="width:' + EXP_WIDTH + '"><source src="' + exp.audio.audio_sound_url + '" type="audio/ogg">Your browser does not support the audio element.</audio>';
-        }
-
-        if (exp.audio.audio_matched_words) {
-            html += '<br/><h6>Words heard: ' + exp.audio.audio_matched_words + '</h6>';
+//            html += '<h6>Audio:</h6>';
+//            html += '<img src="' + exp.audio.audio_image_url + '" width="' + EXP_WIDTH + '"></img>';
+            html += '<img src="' + exp.audio.audio_image_url + '" width="100%"></img>';
         }
 
         expAudio.html(html);
@@ -240,6 +237,15 @@ function showInferenceExplanation(exp) {
         }
 
         html += '</ol>';
+
+        if (exp.audio.audio_sound_url) {
+            html += '<br/><br/><br/>';
+            html += '<audio controls="controls" style="width:' + EXP_WIDTH + '"><source src="' + exp.audio.audio_sound_url + '" type="audio/ogg">Your browser does not support the audio element.</audio>';
+        }
+
+        if (exp.audio.audio_matched_words) {
+            html += '<br/><h6>Words heard: ' + exp.audio.audio_matched_words + '</h6>';
+        }
 
         expInf.html(html);
         expInf.removeClass('d-none');
