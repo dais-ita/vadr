@@ -1,11 +1,11 @@
 {
   "detection_id": "002",
-  "detection_timestamp": "{now}+15000",
-  "activity_id": "{rand:1-101}|17",
-  "video_url": "http://localhost:3000/videos/newclip_005.mp4",
-  "audio_image_url": "http://localhost:3000/images/audio/no.png",
-  "audio_sound_url": "http://localhost:3000/sounds/no.wav",
-  "audio_matched_words": [ "no" ],
-  "insight": "Activity <b>UCF101 class 17 (BoxingSpeedBag)</b> detected\nBoxingSpeedBag indicates action <b>Punch</b>",
-  "insight_summary": "Punch"
+  "detection_timestamp": "{now}+17000",
+  "activity_id": "{rand:1-101}|12",
+  "video_url": "http://localhost:3000/videos/2_BlowDryHair17s.mp4",
+  "audio_image_url": "http://localhost:3000/images/audio/up.png",
+  "audio_sound_url": "http://localhost:3000/sounds/up.wav",
+  "audio_matched_words": [ "up" ],
+  "insight": "Activity <b>UCF101 class 12 (BlowDryHair)</b> detected\nBlowDryHair indicates action <b>Salute</b>",
+  "insight_summary": "Salute"
 }

@@ -1,0 +1,11 @@
+{
+  "detection_id": "007",
+  "detection_timestamp": "{now}+73500",
+  "activity_id": "{rand:1-101}|17",
+  "video_url": "http://localhost:3000/videos/newclip_005.mp4",
+  "audio_image_url": "http://localhost:3000/images/audio/no.png",
+  "audio_sound_url": "http://localhost:3000/sounds/no.wav",
+  "audio_matched_words": [ "no" ],
+  "insight": "Activity <b>UCF101 class 17 (BoxingSpeedBag)</b> detected\nBoxingSpeedBag indicates action <b>Punch</b>",
+  "insight_summary": "Punch"
+}
