@@ -5,8 +5,8 @@ BabyCrawling
 BalanceBeam
 BandMarching
 BasketballDunk
-BlowDryingHair
-BlowingCandle
+BlowDryHair
+BlowingCandles
 BodyWeightSquats
 Bowling
 BoxingPunchingBag
@@ -24,7 +24,7 @@ Haircut
 Hammering
 HammerThrow
 HandstandPushups
-HandstandWalking 
+HandstandWalking
 HeadMassage
 IceDancing
 Knitting

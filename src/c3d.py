@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from src import explain
+import torchexplain
 
 
 class C3D(nn.Module):
@@ -11,32 +11,50 @@ class C3D(nn.Module):
     def __init__(self, num_classes, pretrained=False, range=(-1,1)):
         super(C3D, self).__init__()
 
-        self.conv1 = explain.Conv3d(3, 64, kernel_size=(3, 3, 3), padding=(1, 1, 1), range=range)
-        self.pool1 = explain.MaxPool3d(kernel_size=(1, 2, 2), stride=(1, 2, 2))
+        self.layer1 = nn.Sequential(
+            torchexplain.Conv3d(3, 64, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            torchexplain.ReLU(inplace=True),
+            torchexplain.MaxPool3d(kernel_size=(1, 2, 2), stride=(1, 2, 2))
+        )
 
-        self.conv2 = explain.Conv3d(64, 128, kernel_size=(3, 3, 3), padding=(1, 1, 1))
-        self.pool2 = explain.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
+        self.layer2 = nn.Sequential(
+            torchexplain.Conv3d(64, 128, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            torchexplain.ReLU(inplace=True),
+            torchexplain.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
+        )
 
-        self.conv3a = explain.Conv3d(128, 256, kernel_size=(3, 3, 3), padding=(1, 1, 1))
-        self.conv3b = explain.Conv3d(256, 256, kernel_size=(3, 3, 3), padding=(1, 1, 1))
-        self.pool3 = explain.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
+        self.layer3 = nn.Sequential(
+            torchexplain.Conv3d(128, 256, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            torchexplain.ReLU(inplace=True),
+            torchexplain.Conv3d(256, 256, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            torchexplain.ReLU(inplace=True),
+            torchexplain.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
+        )
 
-        self.conv4a = explain.Conv3d(256, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1))
-        self.conv4b = explain.Conv3d(512, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1))
-        self.pool4 = explain.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
+        self.layer4 = nn.Sequential(
+            torchexplain.Conv3d(256, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            torchexplain.ReLU(inplace=True),
+            torchexplain.Conv3d(512, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            torchexplain.ReLU(inplace=True),
+            torchexplain.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
+        )
 
-        self.conv5a = explain.Conv3d(512, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1))
-        self.conv5b = explain.Conv3d(512, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1))
-        self.pool5 = explain.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2), padding=(0, 1, 1))
+        self.layer5 = nn.Sequential(
+            torchexplain.Conv3d(512, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            torchexplain.ReLU(inplace=True),
+            torchexplain.Conv3d(512, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            torchexplain.ReLU(inplace=True),
+            torchexplain.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2), padding=(0, 1, 1))
+        )
 
-        self.fc6 = explain.Linear(8192, 4096)
-        self.fc7 = explain.Linear(4096, 4096)
-        self.fc8 = explain.Linear(4096, num_classes)
+        self.fc6 = torchexplain.Linear(8192, 4096)
+        self.fc7 = torchexplain.Linear(4096, 4096)
+        self.fc8 = torchexplain.Linear(4096, num_classes)
 
         self.dropout = nn.Dropout(p=0.5)
 
-        self.relu = explain.ReLU()
-        self.flatten = explain.Flatten()
+        self.relu = torchexplain.ReLU()
+        self.flatten = torchexplain.Flatten()
 
         self.__init_weight()
 
@@ -45,30 +63,25 @@ class C3D(nn.Module):
 
     def forward(self, x):
 
-        x = self.relu(self.conv1(x))
-        x = self.pool1(x)
+        x = self.layer1(x)
 
-        x = self.relu(self.conv2(x))
-        x = self.pool2(x)
+        x = self.layer2(x)
 
-        x = self.relu(self.conv3a(x))
-        x = self.relu(self.conv3b(x))
-        x = self.pool3(x)
+        x = self.layer3(x)
 
-        x = self.relu(self.conv4a(x))
-        x = self.relu(self.conv4b(x))
-        x = self.pool4(x)
+        x = self.layer4(x)
 
-        x = self.relu(self.conv5a(x))
-        x = self.relu(self.conv5b(x))
-        x = self.pool5(x)
-        x = self.flatten(x)
+        x = self.layer5(x)
+        x = x.view(-1, 8192)
         x = self.relu(self.fc6(x))
         x = self.dropout(x)
         x = self.relu(self.fc7(x))
         x = self.dropout(x)
 
         logits = self.fc8(x)
+
+        return logits
+
 
         return logits
 
@@ -117,7 +130,7 @@ class C3D(nn.Module):
 
     def __init_weight(self):
         for m in self.modules():
-            if isinstance(m, explain.Conv3d):
+            if isinstance(m, torchexplain.Conv3d):
                 # n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
                 # m.weight.data.normal_(0, math.sqrt(2. / n))
                 torch.nn.init.kaiming_normal_(m.weight)
