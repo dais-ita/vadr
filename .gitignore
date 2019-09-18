@@ -111,7 +111,7 @@ node_modules
 # MacOS
 .DS_Store
 
-#torch audio
+#torch
 *.pth
 *.pt
 
