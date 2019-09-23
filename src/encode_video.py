@@ -37,8 +37,11 @@ activities = sorted([join(ds_dir,line.rstrip('\n')) for line in open("audio_clas
 
 for activity in activities:
     print(f"Processing embeddings for {activity}")
-    samples = sorted([join(activity,vidname) for vidname in os.listdir(activity) if not vidname.endswith(".avi")])
+    samples = sorted([join(activity,vidname) for vidname in os.listdir(activity) if not (vidname.endswith(".avi") or vidname.endswith(".wav"))])
     for sample in tqdm(samples):
+        cap = cv2.VideoCapture(sample + ".avi")
+        print(sample, cap.get(cv2.CAP_PROP_FPS))
+        continue
         frames = sorted([join(sample,frame) for frame in os.listdir(sample) if not(frame.endswith("vert.jpg") or frame.endswith("horiz.jpg") or frame.endswith(".pth"))], key=lambda x: int(x.split("_")[-1][:-4]))
         while (len(frames) % 16) != 0:
             frames.append(frames[-1])

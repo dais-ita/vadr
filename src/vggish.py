@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 import torch.nn as nn
+import torchexplain
 from torch import hub
 import os
 import sys
@@ -41,33 +42,42 @@ class VGGish(nn.Module):
     Input:      96x64 amplitude mel-spectrogram
     Output:     128 vector encoding of input
     """
-    def __init__(self):
+    def __init__(self, embedding=False, train=True):
         super(VGGish, self).__init__()
+        if train:
+            self.lib = torch.nn
+        else:
+            self.lib = torchexplain
         self.features = nn.Sequential(
-            nn.Conv2d(1,  64, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(64, 128, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(128, 256, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(256, 256, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(256, 512, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2)
+            self.lib.Conv2d(1,  64, kernel_size=3, padding=1),
+            self.lib.ReLU(inplace=True),
+            self.lib.MaxPool2d(kernel_size=2, stride=2),
+            self.lib.Conv2d(64, 128, kernel_size=3, padding=1),
+            self.lib.ReLU(inplace=True),
+            self.lib.MaxPool2d(kernel_size=2, stride=2),
+            self.lib.Conv2d(128, 256, kernel_size=3, padding=1),
+            self.lib.ReLU(inplace=True),
+            self.lib.Conv2d(256, 256, kernel_size=3, padding=1),
+            self.lib.ReLU(inplace=True),
+            self.lib.MaxPool2d(kernel_size=2, stride=2),
+            self.lib.Conv2d(256, 512, kernel_size=3, padding=1),
+            self.lib.ReLU(inplace=True),
+            self.lib.Conv2d(512, 512, kernel_size=3, padding=1),
+            self.lib.ReLU(inplace=True),
+            self.lib.MaxPool2d(kernel_size=2, stride=2)
         )
         self.embeddings = nn.Sequential(
-            nn.Linear(512*4*6, 4096),
-            nn.ReLU(inplace=True),
-            nn.Linear(4096, 4096),
-            nn.ReLU(inplace=True),
-            nn.Linear(4096, VGGishParams.EMBEDDING_SIZE),
-            nn.ReLU(inplace=True))
+            self.lib.Linear(512*4*6, 4096),
+            self.lib.ReLU(inplace=True),
+            self.lib.Linear(4096, 4096))
+        if not embedding:
+            self.embeddings = list(self.embeddings)
+            self.embeddings += list(nn.Sequential(
+                self.lib.ReLU(inplace=True),
+                self.lib.Linear(4096, VGGishParams.EMBEDDING_SIZE),
+                self.lib.ReLU(inplace=True)))
+            self.embeddings = nn.Sequential(self.embeddings)
+
 
     def forward(self, x):
         x = self.features(x)
@@ -77,7 +87,6 @@ class VGGish(nn.Module):
         x = x.view(x.size(0),-1)
         x = self.embeddings(x)
         return x
-
 
 class Postprocessor(object):
     """Post-processes VGGish embeddings. Returns a torch.Tensor instead of a

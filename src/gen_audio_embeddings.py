@@ -14,7 +14,7 @@ TARGET_DIR = "/media/datasets/VA/UCF-101/"
 extract_audio = False
 
 activities = sorted([join(DATA_DIR, line.rstrip('\n')) for line in open("audio_classes.txt")])
-model = vggish()
+model = vggish().cuda()
 
 if extract_audio:
     for name in activities:
@@ -28,7 +28,7 @@ for name in activities:
     samples = sorted([join(name, sample) for sample in os.listdir(name) if sample.endswith(".wav")])
     for sample in tqdm(samples):
         d, fs = sf.read(sample)
-        chunk_window_len = fs/2
+        chunk_window_len = 0.64*fs
         remainder = chunk_window_len - np.shape(d)[0] % chunk_window_len
         if len(np.shape(d)) > 1:
             pad = np.zeros((int(remainder), np.shape(d)[1]))
