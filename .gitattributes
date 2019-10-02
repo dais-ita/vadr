@@ -1,0 +1,1 @@
+src/c3d.pth filter=lfs diff=lfs merge=lfs -text
