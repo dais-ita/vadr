@@ -36,15 +36,15 @@ class EmbeddingDataset(dataset.Dataset):
 
     def __getitem__(self, idx):
         (v, a), lbl = self.f_cache[idx]
-        v = torch.load(v)
+        v = torch.load(v,map_location="cpu")
         v = (v - v.min())/(v.max() - v.min())
-        a = torch.load(a)
+        a = torch.load(a,map_location="cpu")
         a = (a - a.min()) / (a.max() - a.min())
-        t = torch.zeros(1,v.shape[1] + a.shape[1])
+        t = torch.zeros([v.shape[1] + a.shape[1]])
         # t = torch.zeros(1,v.shape[1] + v.shape[1])
-        t[0,:v.shape[1]] = v.data
-        t[0,a.shape[1]:] = a.data
-        return t
+        t[:v.shape[1]] = v.data
+        t[a.shape[1]:] = a.data
+        return (t, lbl)
 
     def __len__(self):
         return len(self.f_cache)

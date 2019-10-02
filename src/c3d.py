@@ -8,53 +8,59 @@ class C3D(nn.Module):
     The C3D network.
     """
 
-    def __init__(self, num_classes, pretrained=False, range=(-1,1)):
+    def __init__(self, num_classes, pretrained=False, range=(-1,1), embedding=False, train=True):
         super(C3D, self).__init__()
 
+        if train:
+            self.lib = torch.nn
+        else:
+            self.lib = torchexplain
         self.layer1 = nn.Sequential(
-            torchexplain.Conv3d(3, 64, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
-            torchexplain.ReLU(inplace=True),
-            torchexplain.MaxPool3d(kernel_size=(1, 2, 2), stride=(1, 2, 2))
+            self.lib.Conv3d(3, 64, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            self.lib.ReLU(inplace=True),
+            self.lib.MaxPool3d(kernel_size=(1, 2, 2), stride=(1, 2, 2))
         )
 
         self.layer2 = nn.Sequential(
-            torchexplain.Conv3d(64, 128, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
-            torchexplain.ReLU(inplace=True),
-            torchexplain.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
+            self.lib.Conv3d(64, 128, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            self.lib.ReLU(inplace=True),
+            self.lib.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
         )
 
         self.layer3 = nn.Sequential(
-            torchexplain.Conv3d(128, 256, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
-            torchexplain.ReLU(inplace=True),
-            torchexplain.Conv3d(256, 256, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
-            torchexplain.ReLU(inplace=True),
-            torchexplain.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
+            self.lib.Conv3d(128, 256, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            self.lib.ReLU(inplace=True),
+            self.lib.Conv3d(256, 256, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            self.lib.ReLU(inplace=True),
+            self.lib.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
         )
 
         self.layer4 = nn.Sequential(
-            torchexplain.Conv3d(256, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
-            torchexplain.ReLU(inplace=True),
-            torchexplain.Conv3d(512, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
-            torchexplain.ReLU(inplace=True),
-            torchexplain.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
+            self.lib.Conv3d(256, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            self.lib.ReLU(inplace=True),
+            self.lib.Conv3d(512, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            self.lib.ReLU(inplace=True),
+            self.lib.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
         )
 
         self.layer5 = nn.Sequential(
-            torchexplain.Conv3d(512, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
-            torchexplain.ReLU(inplace=True),
-            torchexplain.Conv3d(512, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
-            torchexplain.ReLU(inplace=True),
-            torchexplain.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2), padding=(0, 1, 1))
+            self.lib.Conv3d(512, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            self.lib.ReLU(inplace=True),
+            self.lib.Conv3d(512, 512, kernel_size=(3, 3, 3), padding=(1, 1, 1)),
+            self.lib.ReLU(inplace=True),
+            self.lib.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2), padding=(0, 1, 1))
         )
 
-        self.fc6 = torchexplain.Linear(8192, 4096)
-        self.fc7 = torchexplain.Linear(4096, 4096)
-        self.fc8 = torchexplain.Linear(4096, num_classes)
+        self.fc6 = self.lib.Linear(8192, 4096)
+        self.fc7 = self.lib.Linear(4096, 4096)
+        if not embedding:
+            self.fc8 = self.lib.Linear(4096, num_classes)
 
         self.dropout = nn.Dropout(p=0.5)
 
-        self.relu = torchexplain.ReLU()
-        self.flatten = torchexplain.Flatten()
+        self.relu = self.lib.ReLU()
+
+        self.embedding = embedding
 
         self.__init_weight()
 
@@ -75,12 +81,12 @@ class C3D(nn.Module):
         x = x.view(-1, 8192)
         x = self.relu(self.fc6(x))
         x = self.dropout(x)
+        if self.embedding:
+            return self.fc7(x)
         x = self.relu(self.fc7(x))
         x = self.dropout(x)
 
         logits = self.fc8(x)
-
-        return logits
 
 
         return logits
@@ -130,7 +136,7 @@ class C3D(nn.Module):
 
     def __init_weight(self):
         for m in self.modules():
-            if isinstance(m, torchexplain.Conv3d):
+            if isinstance(m, self.lib.Conv3d):
                 # n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
                 # m.weight.data.normal_(0, math.sqrt(2. / n))
                 torch.nn.init.kaiming_normal_(m.weight)
